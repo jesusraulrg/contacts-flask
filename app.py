@@ -14,6 +14,7 @@ def get_connection():
     conn = connect(host=host, port=port, dbname=dbname, user=user, password=password)
     return conn
 
+
 @app.route('/')
 def home():
     conn = get_connection()
@@ -26,9 +27,20 @@ def home():
 
     return 'Hello World'
 
+
 @app.get('/contacts')
 def get_contacts():
-    return 'getting contacts'
+
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute('SELECT * FROM contactos')
+    contacts = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(contacts)
 
 @app.post('/contacts')
 def create_contact():
@@ -59,11 +71,18 @@ def delete_contact():
 def update_contact():
     return 'updating contact'
 
-@app.get('/contacts')
-def get_contact():
-    return 'getting contact'
+@app.get('/contacts/<id>')
+def get_contact(id):
 
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
 
+    cur.execute('SELECT * FROM contactos WHERE id = %s', (id,))
+    contact = cur.fetchone()
+
+    if contact is None:
+        return jsonify({'message': 'Contact not found'}), 404
+    return jsonify(contact)
 
 
 if __name__ == '__main__':
