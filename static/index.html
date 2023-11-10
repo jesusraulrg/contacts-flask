@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Flask App</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body class="bg-light">
+    <div class="container">
+        <div class="col-md-4 offset-md-4">
+            <h1>Insertar Contacto</h1>
+            <form id="contactsForm" class="card card-body bg-dark text-dark">
+
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" placeholder="Nombre" class="form-control mb-2" required>
+
+                <label for="apellidos">Apellidos</label>
+                <input type="text" name="apellidos" placeholder="Apellidos" class="form-control mb-2">
+
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Email" class="form-control mb-2" required>
+
+                <label for="telefono">Teléfono</label>
+                <input type="text" name="telefono" placeholder="Teléfono" class="form-control mb-2">
+
+                <button class="btn btn-primary">Guardar</button>
+
+            </form>
+            <ul id="contactsList" class="list-group">
+                <li class="list-group-item">item 1</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from psycopg2 import connect, extras
 
 app = Flask(__name__)
@@ -17,15 +17,7 @@ def get_connection():
 
 @app.route('/')
 def home():
-    conn = get_connection()
-    cur = conn.cursor()
-    
-    cur.execute('SELECT 1 + 1')
-    result = cur.fetchone()
-    
-    print(result)
-
-    return 'Hello World'
+    return send_file('static/index.html')
 
 
 @app.get('/contacts')
@@ -63,13 +55,45 @@ def create_contact():
 
     return jsonify(new_created_contact)
 
-@app.delete('/contacts')
-def delete_contact():
-    return 'deleting contact'
+@app.delete('/contacts/<id>')
+def delete_contact(id):
 
-@app.put('/contacts')
-def update_contact():
-    return 'updating contact'
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute('DELETE FROM contactos WHERE id = %s RETURNING *', (id,))
+    contact = cur.fetchone()
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    if contact is None:
+        return jsonify({'message': 'Contact not found'}), 404
+    return jsonify(contact)
+
+@app.put('/contacts/<id>')
+def update_contact(id):
+
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    new_contact = request.get_json()
+    nombre = new_contact['nombre']
+    apellidos = new_contact['apellidos']
+    email = new_contact['email']
+    telefono = new_contact['telefono']
+
+    cur.execute('UPDATE contactos SET nombre = %s, apellidos = %s, email = %s, telefono = %s WHERE id = %s RETURNING *', (nombre, apellidos, email, telefono, id))
+    updated_contact = cur.fetchone()
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    if updated_contact is None:
+        return jsonify({'message': 'Contact not found'}), 404
+    return jsonify(updated_contact)
 
 @app.get('/contacts/<id>')
 def get_contact(id):
