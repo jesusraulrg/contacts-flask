@@ -1,5 +1,73 @@
 const contactsForm = document.querySelector('#contactsForm');
 
+let contacts = []
+let editing = false;
+let contactId = null
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const response = await fetch('/contacts');
+    const data = await response.json()
+    contacts = data
+    renderContact(contacts)
+});
+
+function renderContact(contacts){
+    const contactsList = document.querySelector('#contactsList')
+    contactsList.innerHTML = ''
+
+    contacts.forEach(contact => {
+        const contactItem = document.createElement('li')
+        contactItem.classList = 'list-group-item list-group-item-dark my-2'
+        contactItem.innerHTML = `
+        <header class="d-flex justify-content-between align-items-center">
+            <h3>${contact.nombre}</h3>
+            <div>
+                <button class="btn-edit btn btn-secondary btn-sm">Editar</button>
+                <button class="btn-delete btn btn-danger btn-sm">Eliminar</button>
+            </div>
+        </header>
+        <p>${contact.apellidos}</p>
+        <p>${contact.email}</p>
+        <p>${contact.telefono}</p>
+        `
+
+        const btnDelete = contactItem.querySelector('.btn-delete')
+
+        btnDelete.addEventListener('click', async () => {
+            const response = await fetch(`/contacts/${contact.id}`, {
+                method: 'DELETE'
+            })
+            const data = await response.json()
+            
+            contacts = contacts.filter(contact => contact.id !== data.id)
+            renderContact(contacts)
+        })
+
+
+        const btnEdit = contactItem.querySelector('.btn-edit')
+
+        btnEdit.addEventListener('click', async (e) => {
+
+            const response = await fetch(`/contacts/${contact.id}`,)
+            const data = await response.json()
+
+            contactsForm['nombre'].value = data.nombre;
+            contactsForm['apellidos'].value = data.apellidos;
+            contactsForm['email'].value = data.email;
+            contactsForm['telefono'].value = data.telefono;
+
+            editing = true;
+            contactId = data.id;
+
+        })
+
+
+        contactsList.append(contactItem)
+    });
+
+}
+
+
 contactsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -8,21 +76,44 @@ contactsForm.addEventListener('submit', async (e) => {
     const email = contactsForm['email'].value;
     const telefono = contactsForm['telefono'].value;
 
-    const response = await fetch('/contacts', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            nombre,
-            apellidos,
-            email,
-            telefono
-        })
-    });
+    if (!editing) {
+        const response = await fetch('/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre,
+                apellidos,
+                email,
+                telefono
+            })
+        });
+    
+        const data = await response.json();
+    
+        contacts.unshift(data)   
+    } else {
+        const response = await fetch(`/contacts/${contactId}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre,
+                apellidos,
+                email,
+                telefono
+            }),
+        });
 
-    const data = await response.json();
-    console.log(data);
+        const updatedContact = await response.json();
+        contacts = contacts.map(contact => contact.id == updatedContact.id ? updatedContact: contact);
+        editing = false
+        contactId = null
+    }
 
+    renderContact(contacts)
     contactsForm.reset();
 });
+
