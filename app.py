@@ -19,7 +19,6 @@ def get_connection():
 def home():
     return send_file('static/index.html')
 
-
 @app.get('/contacts')
 def get_contacts():
 
@@ -33,6 +32,7 @@ def get_contacts():
     conn.close()
 
     return jsonify(contacts)
+
 
 @app.post('/contacts')
 def create_contact():

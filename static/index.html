@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contactos: Insertar Contacto</title>
-    <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <title>API CRUD | Contactos</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/litera/bootstrap.min.css">
     <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body class="bg-light">
     <div class="container">
-        <div class="col-md-4 offset-md-4">
-            <h1>Insertar Contacto</h1>
-            <form id="contactsForm" class="card card-body bg-dark text-dark">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">Insertar Contacto</h1>
+            <form id="contactsForm" class="form-group">
 
-                <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" placeholder="Nombre" class="form-control mb-2" required>
+                <label class="form-label mt-4" for="nombre">Nombre</label>
+                <input type="text" name="nombre" placeholder="Nombre" class="form-control" required>
 
-                <label for="apellidos">Apellidos</label>
-                <input type="text" name="apellidos" placeholder="Apellidos" class="form-control mb-2">
+                <label class="form-label mt-4" for="apellidos">Apellidos</label>
+                <input type="text" name="apellidos" placeholder="Apellidos" class="form-control">
 
-                <label for="email">Email</label>
-                <input type="email" name="email" placeholder="Email" class="form-control mb-2" required>
+                <label class="form-label mt-4" for="email">Email</label>
+                <input type="email" name="email" placeholder="Email" class="form-control" required>
 
-                <label for="telefono">Teléfono</label>
-                <input type="text" name="telefono" placeholder="Teléfono" class="form-control mb-2">
+                <label class="form-label mt-4" for="telefono">Teléfono</label>
+                <input type="text" name="telefono" placeholder="Teléfono" class="form-control">
 
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-lg btn-dark">Guardar</button>
 
             </form>
-            <ul id="contactsList" class="list-group">
+            <ul id="contactsList" class="list-group list-group">
             </ul>
         </div>
     </div>

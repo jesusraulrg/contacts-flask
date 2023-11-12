@@ -17,18 +17,17 @@ function renderContact(contacts){
 
     contacts.forEach(contact => {
         const contactItem = document.createElement('li')
-        contactItem.classList = 'list-group-item list-group-item-dark my-2'
+        contactItem.classList = 'list-group-item list-group-item-light my-2'
         contactItem.innerHTML = `
         <header class="d-flex justify-content-between align-items-center">
-            <h3>${contact.nombre}</h3>
+            <h3>${contact.nombre} ${contact.apellidos}</h3>
             <div>
-                <button class="btn-edit btn btn-secondary btn-sm">Editar</button>
-                <button class="btn-delete btn btn-danger btn-sm">Eliminar</button>
+                <button class="btn-edit btn btn-success btn-m">Editar</button>
+                <button class="btn-delete btn btn-danger btn-m">Eliminar</button>
             </div>
         </header>
-        <p>${contact.apellidos}</p>
-        <p>${contact.email}</p>
-        <p>${contact.telefono}</p>
+        <p class="lead">Email: ${contact.email}</p>
+        <p class="lead">Teléfono: ${contact.telefono}</p>
         `
 
         const btnDelete = contactItem.querySelector('.btn-delete')
@@ -60,7 +59,6 @@ function renderContact(contacts){
             contactId = data.id;
 
         })
-
 
         contactsList.append(contactItem)
     });
