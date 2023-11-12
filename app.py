@@ -1,13 +1,17 @@
 from flask import Flask, jsonify, request, send_file
 from psycopg2 import connect, extras
+from dotenv import load_dotenv
+from os import environ
+
+load_dotenv()
 
 app = Flask(__name__)
 
-host = 'localhost'
-port = 5432
-dbname = 'contacts'
-user = 'jesusraulrg'
-password = 'DSitMoM.12'
+host = environ.get('DB_HOST')
+port = environ.get('DB_PORT')
+dbname = environ.get('DB_NAME')
+user = environ.get('DB_USER')
+password = environ.get('DB_PASSWORD')
 
 
 def get_connection():
